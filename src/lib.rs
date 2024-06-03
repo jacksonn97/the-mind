@@ -1,39 +1,56 @@
 mod net;
-mod player_space;
+mod client;
+mod server;
 
-use anyhow::Result;
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct GameId();
 
-// инфа для клиента т.е. адрес сервера и набор чисел
-#[derive(Debug, Serialize, Deserialize)]
-struct Player {
-    nick: String,
-    nums: Nums,
-    host: bool,
-    // remote_host:
-}
-
 // цифорки
 #[derive(Debug, Serialize, Deserialize)]
-struct Nums {
-    nums: Vec<u8>,
+pub struct Nums {
+    pub nums: Vec<u8>,
 }
 
-impl Player {
-    async fn send(&mut self) -> Result<()> {
-        todo!()
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Error {
+    msg: String,
+    error_kind: ErrorKind,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum ErrorKind {
+    CorrData,
+    WrongNum,
+    Disconnected(usize),
+    OutOfBounds,
+}
+
+impl Error {
+    fn new(msg: String, error_kind: ErrorKind) -> Self {
+        Self { msg, error_kind }
+    }
+}
+
+impl std::error::Error for Error {
+    fn description(&self) -> &str {
+        &self.msg
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} on {:?}", self.msg, self.error_kind)
     }
 }
 
 impl Nums {
-    async fn pop(&mut self) -> u8 {
-        todo!()
-    }
-
-    async fn set(&mut self, nums: Self) {
-        todo!()
+    async fn new(nums: Vec<u8>) -> Self {
+        let mut v = Vec::with_capacity(12);
+        v = nums;
+        Self { nums: v }
     }
 }

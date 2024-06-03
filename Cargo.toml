@@ -6,8 +6,9 @@ edition = "2021"
 [dependencies]
 ahash = "0.8.11"
 anyhow = "1.0.86"
+kyber-pke = "0.5.0"
 log = "0.4.21"
-pqc_kyber = { version =  "0.7.1", features = ["std"] }
+pqc_kyber_kyberslash = { version =  "0.7.1", features = ["std"] }
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0.117"
